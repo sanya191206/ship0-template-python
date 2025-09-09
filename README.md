@@ -1,75 +1,129 @@
-# Ship 0 — Python (CLI + Persistence + Tests)
+# Ship 0 — Python
+**Two tracks in one repo:** a gentle **Baseline** to verify your setup, and an optional **Hard Mode** that asks you to build a tiny CLI with persistence and tests.
 
-**Purpose:** Go beyond “env check.” You’ll ship a tiny CLI that persists entries to disk and comes with a couple of tests.
+## Why you’re doing this
+- To prove your computer can run modern Python (3.11) and packages.
+- To learn **what** each command does — not just copy-paste incantations.
+- To get comfortable with **virtual environments**, **pip**, **modules**, **JSON**, **tests**, and **Git**.
 
-## What you’ll build
-A command-line “Ship Log”:
-- `python -m ship0 add "Wrote my first script"` → appends an entry
-- `python -m ship0 list` → prints newest-first
-- `python -m ship0 stats` → prints count + average entry length (uses `numpy`)
-- `python -m ship0 clear -y` → clears the log
+---
 
-Data is stored in `data/log.json` (overridable via the env var `SHIP0_DATA_PATH`).
+## What is a virtual environment (venv), really?
+A **virtual environment** is a self-contained folder that holds its own Python interpreter and installed packages. It keeps your project’s dependencies isolated from the rest of your machine so one project’s install doesn’t break another’s.
 
-## Prereqs
-- Python **3.11** (and `venv`)
-- `pip`
+- Creating a venv: `python3 -m venv .venv` creates a `.venv/` folder in your repo.
+- Activating it: `source .venv/bin/activate` (macOS/Linux) or `.\.venv\Scripts\activate` (Windows).
+- Why activate? So `python` and `pip` point **inside** the venv. You can confirm with `which python` (macOS/Linux) or `where python` (Windows).
 
-## Quick start
+When you’re done, deactivate with `deactivate` or just close the terminal. You can delete a venv by removing the `.venv/` folder and recreating it later.
+
+---
+
+## What is `pip`?
+`pip` is Python’s package installer. It grabs packages from the Python Package Index (PyPI).
+- Upgrade it inside your venv: `python -m pip install --upgrade pip`
+- Install from a list: `pip install -r requirements.txt`
+
+We use **NumPy** for a tiny stat calculation and **pytest** for tests.
+
+---
+
+## What does `python -m` do?
+The `-m` flag runs a **module** by name (like `ship0`) instead of a file path. It tells Python to treat the current directory as a package, look up `ship0/__main__.py`, and execute it. This is how you’ll run your CLI in Hard Mode: `python -m ship0`.
+
+---
+
+## Baseline (Required) — Environment Check
+You’ll run a small script that prints:
+- your name,
+- Python version,
+- NumPy version,
+- your 1‑sentence semester goal read from `goals.txt`.
+
+**Files you’ll touch**
+- `env_check.py` — the script (already written)
+- `goals.txt` — put your one‑sentence goal on the **first line**
+- `README.md` — paste your run output under **Run Output**
+
+**Run it (read the comments in each step)**
 ```bash
-# macOS/Linux
-python3 -V
-python3 -m venv .venv
-source .venv/bin/activate
+# 1) Create a fresh virtual environment in this repo
+python3 -m venv .venv                     # Windows: py -3.11 -m venv .venv
+
+# 2) Activate it (this changes your PATH so 'python' points inside .venv)
+source .venv/bin/activate                 # Windows: .\.venv\Scripts\activate
+
+# 3) Upgrade pip and install the project requirements into THIS venv
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 
-# Try it
-python -m ship0 add "hello world"
-python -m ship0 list
-python -m ship0 stats
+# 4) Edit the first line of goals.txt with your one-sentence goal
+#    Then run the script:
+python env_check.py
 ```
 
-```powershell
-# Windows (PowerShell)
-py -3.11 --version
-py -3.11 -m venv .venv
-.\.venv\Scripts\activate
-python -m pip install --upgrade pip
-pip install -r requirements.txt
+**Pass (Baseline) if all true**
+- Script prints your **name**, **Python version**, **NumPy version**, and **goal**.
+- Screenshot saved at `screenshots/run.png` **or** embedded in this README.
+- **≥2 commits** with meaningful messages.
+- Repo name: `edge-f25-ship0-<onyen-or-last-first>`.
 
-python -m ship0 add "hello world"
-python -m ship0 list
-python -m ship0 stats
+Paste your terminal output here:
 ```
-
-## What to edit
-- Open `src/ship0/cli.py` and set `DEFAULT_NAME = "Your Name"` (optional, used in greeting).
-- Edit the first line of `goals.txt` with a **one‑sentence** semester goal.
-- Add a terminal screenshot at `screenshots/run.png`.
-- Add your run commands + output under **Run Output** below.
-
-## Pass criteria
-- CLI commands **work** and persist to `data/log.json` (or `SHIP0_DATA_PATH`).
-- `pytest` runs **and passes**.
-- `stats` prints both **count** and **mean length** (as a number) using `numpy`.
-- Screenshot present at `screenshots/run.png` (or embedded).
-- **≥2 commits**.
-- Repo name exactly: `edge-f25-ship0-<onyen-or-last-first>`.
-
-## Run tests
-```bash
-# Env must be active; then:
-pytest -q
-```
-
-## Run Output (paste here)
-```
-<paste your terminal output here>
+<Run Output: paste the lines printed by env_check.py>
 ```
 
 ---
 
-### Why this is “a little harder”
-- You touch **argparse**, **file I/O**, **JSON**, **numpy**, and **pytest**.
-- You learn to run a module via `python -m ship0`.
+## Hard Mode (Optional, Scored) — CLI + Persistence + Tests
+Build a tiny **Ship Log** command‑line app. You’ll implement a few functions and wire them into a CLI.
+
+**Commands (after implementation)**
+- `python -m ship0 add "text"` — append a timestamped entry
+- `python -m ship0 list` — print newest‑first
+- `python -m ship0 stats` — print **count** and **mean entry length** (uses NumPy)
+- `python -m ship0 clear -y` — clear the log without a confirmation prompt
+
+**Data**
+- Stored at `data/log.json` (auto-created). Override with env var `SHIP0_DATA_PATH=/tmp/mylog.json`.
+
+**Where to write code**
+- `src/ship0/storage.py` — implement `load_entries`, `save_entries`, `add_entry`, `clear_entries`
+- `src/ship0/stats.py` — implement `mean_length`
+- `src/ship0/cli.py` — the `argparse` CLI is scaffolded for you; minimal edits may be needed
+
+**Tests**
+- Run: `pytest -q` (inside your venv). Two tests are provided.
+- You pass if both tests are **green** and the CLI behaves as specified.
+
+**Opt‑in CI for Hard Mode**
+- Create an empty file named `HARDMODE` (no extension) in the repo root **when you’re ready**. Our GitHub Action will detect it and run `pytest`. No `HARDMODE` file = light checks only (baseline students won’t see a scary red X).
+
+---
+
+## Conceptual checkpoints (answer to yourself)
+- Can you explain what **activating a venv** changes on your system?
+- Can you show that `pip list` inside the venv differs from global `pip list`?
+- Why does `python -m ship0` work without a file path?
+- What are **idempotent** file writes, and why do we create the `data/` folder if missing?
+- What makes a good test small and reliable?
+
+---
+
+## Troubleshooting
+- **Windows execution policy**: if activation fails, run PowerShell as Admin once:
+  ```powershell
+  Set-ExecutionPolicy RemoteSigned
+  ```
+  Then reactivate: `.\.venv\Scripts\activate`
+- **“pip not found”** inside venv: use `python -m pip ...`
+- **NumPy build errors on Linux**: `pip install --upgrade pip setuptools wheel`
+- **pytest can’t import ship0**: ensure you’re running tests from the repo root and your venv is active.
+
+---
+
+## What to submit
+- Repo URL
+- Screenshot
+- Track (Baseline only **or** Hard Mode)
+- Minutes spent + biggest blocker

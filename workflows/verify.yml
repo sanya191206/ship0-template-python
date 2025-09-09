@@ -1,15 +1,26 @@
 name: verify
 on: [push, pull_request]
 jobs:
-  python-check:
+  baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - run: python -V && pip -V
+      - run: python -m pip install --upgrade pip
+      - run: pip install -r requirements.txt
+      - run: python env_check.py
+
+  hardmode:
+    if: ${{ hashFiles('HARDMODE') != '' }}
     runs-on: ubuntu-latest
     env:
       PYTHONPATH: src
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - run: python -V && pip -V
+        with: { python-version: '3.11' }
+      - run: python -m pip install --upgrade pip
       - run: pip install -r requirements.txt
       - run: pytest -q

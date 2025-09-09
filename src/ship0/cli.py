@@ -1,9 +1,6 @@
-import argparse
-import sys
+import argparse, sys
 from .storage import add_entry, load_entries, clear_entries
 from .stats import mean_length
-
-DEFAULT_NAME = "Your Name"
 
 def main(argv=None):
     parser = argparse.ArgumentParser(prog="ship0", description="Edge Labs — Ship Log (Python)")
