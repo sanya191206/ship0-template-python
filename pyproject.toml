@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "edge-ship0"
+version = "0.0.1"
+requires-python = ">=3.11"
+dependencies = ["numpy"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
