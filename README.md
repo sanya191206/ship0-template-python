@@ -13,16 +13,11 @@
 ## Get the code
 
 You’ll work directly from the shared repository. Don’t fork or template.
+1. First either fork the repository or use the template of this repository to make your own copy.
 
-1. Clone the starter repo:
+2. Clone the forked/templated repository repo or use the built in "Clone a Github Repo" on a newly opened window.
 
-   ```bash
-   git clone https://github.com/Edge-Carolina/ship0-template-python.git
-   cd ship0-template-python
-   ```
-  or use the built in "Clone a Github Repo" on a newly opened window.
-
-2. Create a new branch named with your first and last name (lowercase, dash separated):
+3. Create a new branch named with your first and last name (lowercase, dash separated):
 
    ```bash
    git checkout -b <firstname-lastname>
@@ -34,7 +29,7 @@ You’ll work directly from the shared repository. Don’t fork or template.
    git checkout -b weston-voglesonger
    ```
 
-3. Verify your branch:
+4. Verify your branch:
 
    ```bash
    git branch
