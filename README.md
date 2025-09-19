@@ -128,7 +128,11 @@ python env_check.py
 Paste your terminal output here:
 
 ```
-<Run Output: paste the lines printed by env_check.py>
+Name: SANYA SAQIB
+Python: 3.12.1
+NumPy: 2.3.3
+Goal: Build something small every week and demo it.
+
 ```
 
 ---
